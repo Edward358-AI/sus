@@ -27,6 +27,26 @@
     }('689_52028_gameapi'));
     </script>
     <script>
+      (function() {
+        if (typeof window.invokeApplixirVideoUnit === "function") {
+          return;
+        }
+
+        // Unity calls this function directly; fail gracefully when ad SDK is blocked/unavailable.
+        window.invokeApplixirVideoUnit = function(config) {
+          if (config && typeof config.fail === "function") {
+            try {
+              config.fail();
+            } catch (e) {
+              console.warn("Applixir fallback fail callback threw", e);
+            }
+          }
+          return false;
+        };
+      })();
+    </script>
+    <script type="text/javascript" src="https://cdn.applixir.com/applixir.sdk3.0m.js" async></script>
+    <script>
       var unityInstance = UnityLoader.instantiate("unityContainer", "Build/Game.json", {onProgress: UnityProgress});
     </script>
   </head>
@@ -34,7 +54,6 @@
     <div class="webgl-content" id="unityContainer">
 		</div>
     <p>adblock is recommended</p>
-    <script type='text/javascript' src="https://cdn.applixir.com/applixir.sdk3.0m.js"></script>
   </body>
 </html>
 
